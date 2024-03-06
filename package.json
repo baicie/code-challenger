@@ -1,0 +1,15 @@
+{
+  "private": true, 
+  "scripts": {
+    "update": "ncu -uws --root"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces":{
+    "packages": [
+      "packages/*",
+      "challenge/*"
+    ]
+  }
+}
