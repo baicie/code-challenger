@@ -1,15 +1,18 @@
 {
-  "private": true, 
+  "private": true,
   "scripts": {
     "update": "ncu -uws --root"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "workspaces":{
+  "workspaces": {
     "packages": [
       "packages/*",
       "challenge/*"
     ]
+  },
+  "devDependencies": {
+    "unbuild": "^2.0.0"
   }
 }

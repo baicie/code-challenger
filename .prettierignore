@@ -1,0 +1,6 @@
+node_modules
+dist
+public
+**/*.svg
+**/*.png
+change-notes/changes.md
