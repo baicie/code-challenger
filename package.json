@@ -13,6 +13,7 @@
     ]
   },
   "devDependencies": {
+    "sass": "^1.71.1",
     "unbuild": "^2.0.0"
   }
 }

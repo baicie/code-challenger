@@ -1,11 +1,13 @@
-import React from 'react'
 import {
   LaptopOutlined,
   NotificationOutlined,
   UserOutlined
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
+import { Layout, Menu, theme } from 'antd'
+import React, { useMemo } from 'react'
+import { Allotment } from 'allotment'
+import styles from './index.module.scss'
 
 const { Header, Content, Sider } = Layout
 
@@ -41,37 +43,47 @@ export const Component: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG }
   } = theme.useToken()
 
+  const contentWidth = useMemo(() => window.innerWidth - 250, [])
+
   return (
-    <Layout>
+    <Layout style={{ height: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}></Header>
+
       <Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
-          <Menu
-            mode='inline'
-            defaultSelectedKeys={['1']}
-            defaultOpenKeys={['sub1']}
-            style={{ height: '100%', borderRight: 0 }}
-            items={items2}
-          />
+        <Sider width={50} style={{ background: colorBgContainer }}>
+          sider
         </Sider>
-        <Layout style={{ padding: '0 24px 24px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 'calc(100vh - 144px)',
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG
-            }}
-          >
-            Content
-          </Content>
-        </Layout>
+
+        <Allotment defaultSizes={[200, contentWidth]}>
+          <Allotment.Pane minSize={200}>
+            <Menu
+              mode='inline'
+              defaultSelectedKeys={['1']}
+              defaultOpenKeys={['sub1']}
+              style={{ height: '100%', borderRight: 0 }}
+              items={items2}
+            />
+          </Allotment.Pane>
+          <Allotment.Pane minSize={200}>
+            <Allotment vertical>
+              <Allotment.Pane>
+                <Content
+                  style={{
+                    padding: 0,
+                    margin: 0,
+                    minHeight: 'calc(100vh - 154px)',
+                    background: colorBgContainer,
+                    borderRadius: borderRadiusLG
+                  }}
+                >
+                  Content
+                </Content>
+              </Allotment.Pane>
+
+              <Allotment.Pane minSize={10}>Pane</Allotment.Pane>
+            </Allotment>
+          </Allotment.Pane>
+        </Allotment>
       </Layout>
     </Layout>
   )
