@@ -1,4 +1,7 @@
 // silder menu pane terminal
-import { Slider } from './slider'
+import { Sider } from './sider'
 
-export { Slider }
+export default {
+  Sider: undefined,
+  Menu: undefined
+}

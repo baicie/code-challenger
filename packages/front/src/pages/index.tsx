@@ -1,71 +1,75 @@
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined
-} from '@ant-design/icons'
-import type { MenuProps } from 'antd'
-import { Layout, Menu, theme } from 'antd'
-import React, { useMemo } from 'react'
 import { Allotment } from 'allotment'
-import styles from './index.module.scss'
+import type { MenuProps, TabsProps } from 'antd'
+import { Layout, Menu, Tabs, theme } from 'antd'
+import React, { useMemo, useState } from 'react'
+import Models from '../model'
 
 const { Header, Content, Sider } = Layout
 
-const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-  key,
-  label: `nav ${key}`
-}))
+type Models = typeof Models
+type ModelKey = keyof Models
+type MenuItem = Required<MenuProps>['items'][number]
 
-const items2: MenuProps['items'] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined
-].map((icon, index) => {
-  const key = String(index + 1)
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1
-      return {
-        key: subKey,
-        label: `option${subKey}`
+const CodeSider = (props: {
+  onSelect: (key: string) => void
+  model: ModelKey
+}) => {
+  const items: MenuItem[] = Object.entries(Models)
+    .filter(([, comps]) => comps.Sider)
+    .map(([key, comps]) => {
+      const Sider = comps.Sider!
+      const item: MenuItem = {
+        key: key,
+        label: key,
+        icon: <Sider />
       }
+      return item
     })
+  return (
+    <Menu
+      inlineCollapsed
+      items={items}
+      mode='inline'
+      defaultSelectedKeys={[props.model]}
+      onSelect={({ key }) => props.onSelect(key)}
+    />
+  )
+}
+
+const CodeMenu = (props: { model: ModelKey }) => {
+  const MyMenu = Models[props.model].Menu
+  if (!MyMenu) {
+    return Models['Default'].Menu
   }
-})
+  return <MyMenu />
+}
 
 export const Component: React.FC = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG }
+    token: { colorBgContainer, borderRadiusLG, colorTextLabel }
   } = theme.useToken()
-
+  const [model, setModel] = useState<keyof typeof Models>('File')
   const contentWidth = useMemo(() => window.innerWidth - 250, [])
+  const contentHeight = useMemo(() => window.innerHeight - 64, [])
 
+  const onSelect = (key: string) => {
+    setModel(key as ModelKey)
+  }
   return (
     <Layout style={{ height: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}></Header>
 
       <Layout>
         <Sider width={50} style={{ background: colorBgContainer }}>
-          sider
+          <CodeSider onSelect={onSelect} model={model} />
         </Sider>
 
         <Allotment defaultSizes={[200, contentWidth]}>
           <Allotment.Pane minSize={200}>
-            <Menu
-              mode='inline'
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
-              style={{ height: '100%', borderRight: 0 }}
-              items={items2}
-            />
+            <CodeMenu model={model} />
           </Allotment.Pane>
           <Allotment.Pane minSize={200}>
-            <Allotment vertical>
+            <Allotment vertical defaultSizes={[contentWidth, 200]}>
               <Allotment.Pane>
                 <Content
                   style={{

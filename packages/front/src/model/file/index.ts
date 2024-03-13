@@ -1,4 +1,6 @@
 // silder menu pane terminal
-import { Slider } from './slider'
+import { Sider } from './sider'
+import { Menu } from './menu'
+import { FileOutlined } from '@ant-design/icons'
 
-export { Slider }
+export default { Sider: FileOutlined, Menu }
