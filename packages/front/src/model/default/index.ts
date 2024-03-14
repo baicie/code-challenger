@@ -1,7 +1,10 @@
 // silder menu pane terminal
-import { Sider } from './sider'
+import { Pane } from './pane'
+import { Terminal } from './terminal/terminal'
 
 export default {
   Sider: undefined,
-  Menu: undefined
+  Menu: undefined,
+  Pane,
+  Terminal
 }

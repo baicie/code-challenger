@@ -1,6 +1,6 @@
 import { Allotment } from 'allotment'
-import type { MenuProps, TabsProps } from 'antd'
-import { Layout, Menu, Tabs, theme } from 'antd'
+import type { MenuProps } from 'antd'
+import { Layout, Menu, theme } from 'antd'
 import React, { useMemo, useState } from 'react'
 import Models from '../model'
 
@@ -44,6 +44,22 @@ const CodeMenu = (props: { model: ModelKey }) => {
   return <MyMenu />
 }
 
+const CodePane = (props: { model: ModelKey }) => {
+  let MyPane = Models[props.model].Pane
+  if (!MyPane) {
+    MyPane = Models['Default'].Pane
+  }
+  return <MyPane />
+}
+
+const CodeTerminal = (props: { model: ModelKey }) => {
+  let MyTerminal = Models[props.model].Terminal
+  if (!MyTerminal) {
+    MyTerminal = Models['Default'].Terminal
+  }
+  return <MyTerminal />
+}
+
 export const Component: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG, colorTextLabel }
@@ -69,7 +85,7 @@ export const Component: React.FC = () => {
             <CodeMenu model={model} />
           </Allotment.Pane>
           <Allotment.Pane minSize={200}>
-            <Allotment vertical defaultSizes={[contentWidth, 200]}>
+            <Allotment vertical defaultSizes={[contentHeight, 200]}>
               <Allotment.Pane>
                 <Content
                   style={{
@@ -80,11 +96,13 @@ export const Component: React.FC = () => {
                     borderRadius: borderRadiusLG
                   }}
                 >
-                  Content
+                  <CodePane model={model} />
                 </Content>
               </Allotment.Pane>
 
-              <Allotment.Pane minSize={10}>Pane</Allotment.Pane>
+              <Allotment.Pane minSize={10}>
+                <CodeTerminal model={model} />
+              </Allotment.Pane>
             </Allotment>
           </Allotment.Pane>
         </Allotment>
