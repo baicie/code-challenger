@@ -1,20 +1,17 @@
-declare global {
-  interface Window {
-    showOpenFilePicker: any
-    showDirectoryPicker: any
-  }
-}
 import { Button } from 'antd'
 import { forwardRef, useCallback } from 'react'
 
 export const Menu = forwardRef((props, ref) => {
   const getFile = useCallback(async () => {
-    console.log('getFile')
-    const [fileHandle] = await window.showOpenFilePicker()
-    const file = await fileHandle.getFile()
-    console.log(file)
-
-    return file
+    const dirHandle = await window.showDirectoryPicker()
+    for await (const entry of dirHandle.values()) {
+      if (entry.kind === 'file') {
+        const file = await entry.getFile()
+        console.log(file)
+      } else {
+        console.log(entry)
+      }
+    }
   }, [])
   return (
     <Button onClick={getFile} type='primary'>
