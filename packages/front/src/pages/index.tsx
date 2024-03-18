@@ -1,15 +1,13 @@
 import { Allotment } from 'allotment'
 import type { MenuProps } from 'antd'
 import { Layout, Menu, theme } from 'antd'
-import React, { useMemo, useState } from 'react'
+import { observer } from 'mobx-react-lite'
+import { useMemo, useState } from 'react'
 import Models from '../model'
-
 const { Header, Content, Sider } = Layout
-
 type Models = typeof Models
 type ModelKey = keyof Models
 type MenuItem = Required<MenuProps>['items'][number]
-
 const CodeSider = (props: {
   onSelect: (key: string) => void
   model: ModelKey
@@ -27,7 +25,6 @@ const CodeSider = (props: {
     })
   return (
     <Menu
-      inlineCollapsed
       items={items}
       mode='inline'
       defaultSelectedKeys={[props.model]}
@@ -35,7 +32,6 @@ const CodeSider = (props: {
     />
   )
 }
-
 const CodeMenu = (props: { model: ModelKey }) => {
   const MyMenu = Models[props.model].Menu
   if (!MyMenu) {
@@ -43,7 +39,6 @@ const CodeMenu = (props: { model: ModelKey }) => {
   }
   return <MyMenu />
 }
-
 const CodePane = (props: { model: ModelKey }) => {
   let MyPane = Models[props.model].Pane
   if (!MyPane) {
@@ -51,7 +46,6 @@ const CodePane = (props: { model: ModelKey }) => {
   }
   return <MyPane />
 }
-
 const CodeTerminal = (props: { model: ModelKey }) => {
   let MyTerminal = Models[props.model].Terminal
   if (!MyTerminal) {
@@ -60,23 +54,23 @@ const CodeTerminal = (props: { model: ModelKey }) => {
   return <MyTerminal />
 }
 
-export const Component: React.FC = () => {
+export const Component = observer(() => {
   const {
     token: { colorBgContainer, borderRadiusLG, colorTextLabel }
   } = theme.useToken()
   const [model, setModel] = useState<keyof typeof Models>('File')
   const contentWidth = useMemo(() => window.innerWidth - 250, [])
   const contentHeight = useMemo(() => window.innerHeight - 64, [])
-
   const onSelect = (key: string) => {
     setModel(key as ModelKey)
   }
+
   return (
     <Layout style={{ height: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center' }}></Header>
 
       <Layout>
-        <Sider width={50} style={{ background: colorBgContainer }}>
+        <Sider width={50} style={{ background: colorBgContainer }} collapsed>
           <CodeSider onSelect={onSelect} model={model} />
         </Sider>
 
@@ -109,4 +103,4 @@ export const Component: React.FC = () => {
       </Layout>
     </Layout>
   )
-}
+})
